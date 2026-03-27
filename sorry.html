@@ -1,0 +1,284 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8">
+<title>For My Jaan ❤️</title>
+
+<style>
+body {
+    margin: 0;
+    font-family: 'Segoe UI', sans-serif;
+    background: linear-gradient(135deg, #ffe6eb, #fff5f7);
+    overflow: hidden;
+}
+
+/* ✨ SPARKLES + HEARTS */
+.sparkle, .mini-heart {
+    position: fixed;
+    pointer-events: none;
+    animation: floatUp 6s linear infinite;
+}
+
+.sparkle {
+    width: 6px;
+    height: 6px;
+    background: white;
+    border-radius: 50%;
+    opacity: 0.8;
+}
+
+.mini-heart {
+    font-size: 12px;
+}
+
+/* 🫧 BUBBLES */
+.bubbles {
+    position: fixed;
+    width: 100%;
+    height: 100%;
+    z-index: -1;
+}
+
+.bubble {
+    position: absolute;
+    border-radius: 50%;
+    overflow: hidden;
+    animation: floatUp linear infinite;
+    box-shadow: 0 5px 20px rgba(0,0,0,0.2);
+}
+
+.bubble img {
+    width: 100%;
+    height: 100%;
+    object-fit: cover;
+    animation: pulse 2s infinite;
+}
+
+/* 💓 PULSE */
+@keyframes pulse {
+    0% { transform: scale(1); }
+    50% { transform: scale(1.08); }
+    100% { transform: scale(1); }
+}
+
+/* 💫 FLOAT */
+@keyframes floatUp {
+    0% { transform: translateY(100vh); opacity: 0; }
+    20% { opacity: 1; }
+    100% { transform: translateY(-120vh); opacity: 0; }
+}
+
+/* 💎 GLASS */
+.container {
+    height: 100vh;
+    display: flex;
+    justify-content: center;
+    align-items: center;
+}
+
+.glass {
+    background: rgba(255,255,255,0.6);
+    backdrop-filter: blur(15px);
+    padding: 30px;
+    border-radius: 20px;
+    text-align: center;
+}
+
+/* 💔 */
+h1 { color:#ff4d6d; font-size:60px; }
+
+/* ✨ TEXT */
+.line {
+    opacity: 0;
+    transform: translateY(20px);
+    animation: fadeSlide 0.8s forwards;
+}
+
+@keyframes fadeSlide {
+    to { opacity:1; transform:translateY(0); }
+}
+
+/* ❤️ BUTTONS */
+button {
+    padding: 12px 25px;
+    margin: 10px;
+    border-radius: 30px;
+    border: none;
+    cursor: pointer;
+}
+.yes { background:#ff4d6d; color:white; }
+.no { position:absolute; }
+
+/* 📸 GALLERY */
+.overlay {
+    position: fixed;
+    width:100%;
+    height:100%;
+    background: rgba(0,0,0,0.9);
+    display:none;
+    justify-content:center;
+    align-items:center;
+    z-index:10;
+}
+
+.overlay img {
+    max-width:90%;
+    max-height:90%;
+    border-radius:20px;
+}
+</style>
+</head>
+
+<body>
+
+<!-- ✨ BACKGROUND EFFECTS -->
+<div id="effects"></div>
+
+<!-- 🫧 BUBBLES -->
+<div class="bubbles" id="bubbles"></div>
+
+<!-- 💎 UI -->
+<div class="container">
+<div class="glass">
+<h1>I'm Sorry😔</h1>
+<div id="message"></div>
+
+<button class="yes" onclick="forgive()">Forgive me 💜 </button>
+<button class="no" id="noBtn">No 😤</button>
+
+<div id="finalMsg" style="display:none;">shukria madamji ❤️😚🍫</div>
+</div>
+</div>
+
+<!-- 📸 GALLERY -->
+<div class="overlay" id="overlay">
+<img id="zoomImg">
+</div>
+
+<script>
+
+/* 📸 IMAGES */
+const images = [
+"36.jpeg","35.jpeg","33.jpeg","32.jpeg","31.jpeg",
+"30.jpeg","29.jpeg","28.jpeg","27.jpeg","26.jpeg",
+"10.jpeg","9.jpeg","8.jpeg","7.jpeg","6.jpeg",
+"25.jpeg","24.jpeg","23.jpeg","22.jpeg","21.jpeg",
+"16.jpeg","5.jpeg","2.jpeg","19.jpeg","20.jpeg",
+"11.jpeg","36.jpeg","13.jpeg","14.jpeg","15.jpeg"
+];
+
+let currentIndex = 0;
+
+/* 🫧 BUBBLES */
+function createBubble(){
+    const b=document.createElement("div");
+    b.className="bubble";
+
+    const img=document.createElement("img");
+    const index=Math.floor(Math.random()*images.length);
+    img.src=images[index];
+
+    b.appendChild(img);
+
+    const size=80+Math.random()*80;
+    b.style.width=size+"px";
+    b.style.height=size+"px";
+    b.style.left=Math.random()*100+"vw";
+    b.style.animationDuration=(10+Math.random()*10)+"s";
+
+    b.onclick=()=>{
+        currentIndex=index;
+        showImage();
+    };
+
+    document.getElementById("bubbles").appendChild(b);
+    setTimeout(()=>b.remove(),15000);
+}
+setInterval(createBubble,600);
+
+/* ✨ SPARKLES + HEARTS */
+function createEffects(){
+    const e=document.createElement("div");
+    if(Math.random()>0.5){
+        e.className="sparkle";
+    } else {
+        e.className="mini-heart";
+        e.innerHTML="❤️";
+    }
+
+    e.style.left=Math.random()*100+"vw";
+    e.style.top="100vh";
+
+    document.body.appendChild(e);
+    setTimeout(()=>e.remove(),6000);
+}
+setInterval(createEffects,200);
+
+/* 📸 SHOW IMAGE */
+function showImage(){
+    document.getElementById("overlay").style.display="flex";
+    document.getElementById("zoomImg").src=images[currentIndex];
+}
+
+/* 📱 SWIPE SUPPORT */
+let startX=0;
+
+document.getElementById("overlay").addEventListener("touchstart",e=>{
+    startX=e.touches[0].clientX;
+});
+
+document.getElementById("overlay").addEventListener("touchend",e=>{
+    let endX=e.changedTouches[0].clientX;
+    if(startX-endX>50){
+        currentIndex=(currentIndex+1)%images.length;
+    } else if(endX-startX>50){
+        currentIndex=(currentIndex-1+images.length)%images.length;
+    }
+    showImage();
+});
+
+/* ❌ CLOSE */
+document.getElementById("overlay").onclick=()=>{
+    document.getElementById("overlay").style.display="none";
+};
+
+/* 💖 TEXT */
+const lines=
+[
+"Pata hai hamesha ki tarah dil dukha deta hun mai apka 😔 & I hate that I hurt you",
+"woh toh aap poori hollywood celebrity lgti 🫠", 
+
+"dekho kya swarg se utri hui apsara aa gyi ho prithvi pr",
+"abb mujh manushya ko apsara prapt hui aur mai unhe aadesh du",
+"toh ye dus-sahas lgta mujhe",
+"lekin aap meri pyaari pareshani ho, aur bina apke koi din guzar hi nhi skta mera",
+"toh meri Chanpreet devi ji please forgive me 🙇🏻‍♂️🙏🏻", 
+
+"Golu molu pandu meri agr chali jaogi toh mere assignment ka kya hoga",
+
+"sorry meri baby,darling,jaan,preetey,sohniye,janemann,jigar ka tukda,pyaari pareshani,meri pandu", 
+ 
+ "I LOVE YOU ❤️",];
+const msg=document.getElementById("message");
+lines.forEach((l,i)=>{
+    const d=document.createElement("div");
+    d.className="line";
+    d.style.animationDelay=i*0.8+"s";
+    d.textContent=l;
+    msg.appendChild(d);
+});
+
+/* 💕 BUTTON */
+function forgive(){
+document.getElementById("finalMsg").style.display="block";
+}
+
+const noBtn=document.getElementById("noBtn");
+noBtn.onmouseover=()=>{
+noBtn.style.left=Math.random()*80+"%";
+noBtn.style.top=Math.random()*80+"%";
+}
+
+</script>
+</body>
+</html>
